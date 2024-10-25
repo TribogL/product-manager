@@ -12,9 +12,9 @@ class category extends Model
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'name';
-    protected $primaryKey = 'id';
-    public $timestamps = true;
+    // protected $table = 'name';
+    // protected $primaryKey = 'id';
+   //public $timestamps = false;
     //protected $guarded = [];
 
     protected $fillable = [
