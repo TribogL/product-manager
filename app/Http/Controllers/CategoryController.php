@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CategoryRequest;
 use App\Models\category;
 use Illuminate\Http\Request;
 
@@ -21,23 +22,31 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return "este metodo es para mostrar el formulario de crear categorias";
+        // Retornamos la vista para crear una nueva categoría
+        return view('categories.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
-        return "este metodo es para guardar categorias";
+        $validatedData = $request->validated();
+
+        Category::create($validatedData);
+
+        return redirect()->route('categories.index')->with('success', 'Categoría creada con éxito.');
     }
 
-    /**
+    /**td colspan="5" class="text-center py-4">No hay categorías registradas.</td>
      * Display the specified resource.
      */
     public function show(string $id)
     {
-        return "este metodo es para mostrar categorias";
+        // Obtenemos la categoría por ID
+        $category = Category::findOrFail($id);
+        // Mostramos la vista de detalles con la categoría específica
+        return view('categories.show', compact('category'));
     }
 
     /**
@@ -45,15 +54,23 @@ class CategoryController extends Controller
      */
     public function edit(string $id)
     {
-        return "este metodo es para mostrar el formulario de editar categorias";
+        // Obtenemos la categoría por ID
+        $category = Category::findOrFail($id);
+        // Retornamos la vista para editar la categoría
+        return view('categories.edit', compact('category'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(CategoryRequest $request, string $id)
     {
-        return "este metodo es para actualizar categorias";
+        $validatedData = $request->validated();
+
+        $category = Category::findOrFail($id);
+        $category->update($validatedData);
+
+        return redirect()->route('categories.index')->with('success', 'Categoría actualizada exitosamente.');
     }
 
     /**
@@ -61,6 +78,11 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        return "este metodo es para eliminar categorias";
+        // Buscamos la categoría por ID y la eliminamos
+        $category = Category::findOrFail($id);
+        $category->delete();
+
+        // Redirigimos a la lista de categorías con un mensaje de éxito
+        return redirect()->route('categories.index')->with('success', 'Categoría eliminada con éxito.');
     }
 }
